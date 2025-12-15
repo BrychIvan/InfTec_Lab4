@@ -1,8 +1,10 @@
 <?php
 
+
 namespace Core;
 
 use PDO;
+use Core\Util;
 use Core\Util;
 
 /**
@@ -23,6 +25,7 @@ class DB
     {
         if (!self::$pdo) {
             $dsn = 'mysql:host=' . MYSQL_HOST . ';port=' . MYSQL_PORT . ';dbname=' . DB_NAME . ';charset=utf8';
+            $dsn = 'mysql:host=' . MYSQL_HOST . ';port=' . MYSQL_PORT . ';dbname=' . DB_NAME . ';charset=utf8';
             $options = array(
                 PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'",
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -30,7 +33,9 @@ class DB
             );
             try {
                 self::$pdo = new PDO($dsn, DB_USERNAME, DB_PASSWORD, $options);
+                self::$pdo = new PDO($dsn, DB_USERNAME, DB_PASSWORD, $options);
             } catch (PDOException $e) {
+                echo "Connection failed: " . $e->getMessage();
                 echo "Connection failed: " . $e->getMessage();
                 exit();
             }
@@ -49,6 +54,7 @@ class DB
         $stmt = $dbh->prepare($sql);
         $result = $stmt->execute($parameters);
 
+        if ($result !== false) {
         if ($result !== false) {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }

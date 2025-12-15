@@ -1,6 +1,9 @@
 <?php
 
+
 namespace Core;
+
+use Core\Util;
 
 use Core\Util;
 
@@ -41,6 +44,8 @@ class Model implements DbModelInterface
     {
         $columns = implode(',', $this->getColumns());
         $this->sql = "select $columns from " . $this->table_name;
+        $columns = implode(',', $this->getColumns());
+        $this->sql = "select $columns from " . $this->table_name;
         return $this;
     }
 
@@ -54,6 +59,8 @@ class Model implements DbModelInterface
         $results = $db->query($sql);
         foreach ($results as $result) {
             array_push($this->columns, $result['Field']);
+        foreach ($results as $result) {
+            array_push($this->columns, $result['Field']);
         }
         return $this->columns;
     }
@@ -65,6 +72,12 @@ class Model implements DbModelInterface
      */
     public function sort($params)
     {
+        if (count($params) > 0) {
+            $this->sql .= sprintf(
+                " order by %s",
+                Util::keyValueToList($params, "%s %s")
+            );
+        }
         if (count($params) > 0) {
             $this->sql .= sprintf(
                 " order by %s",
@@ -137,6 +150,7 @@ class Model implements DbModelInterface
         foreach ($columns as $column) {
             $column_value = filter_input(INPUT_POST, $column);
             if ($column_value && $column !== $this->id_column) {
+            if ($column_value && $column !== $this->id_column) {
                 $values[$column] = $column_value;
             }
         }
@@ -153,6 +167,11 @@ class Model implements DbModelInterface
         return $this->id_column;
     }
 
+
+    /**
+     * ERROR
+     */
+    public function getId(): int
 
     /**
      * ERROR
